@@ -1,0 +1,93 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    static long journeyToMoon(long n, long[][] asnt) {
+       
+        /*java.util.Arrays.sort(asnt, new java.util.Comparator<long[]>() {
+            public int compare(long[] a, long[] b) {
+                return new Long(a[0]).compareTo(new Long(b[0]));
+            }
+        });*/
+
+       // Set arr []= new HashSet[asnt.length];
+        ArrayList<Set> arr = new ArrayList<Set>(); 
+       
+        for(int i=0;i<asnt.length;i++){
+        	
+         long j=asnt[i][0],k=asnt[i][1];
+         
+           
+          if(i==0){
+        	  Set set = new HashSet();  
+            set.add(j);
+            set.add(k);
+            arr.add(set);
+           
+        }else{
+         boolean added = false;
+        int idx = 0;
+        for(int m=0;m<arr.size();m++){
+        
+          if(arr.get(m).contains(j) || arr.get(m).contains(k)){
+        	  if(!added){
+        	  arr.get(m).add(j);
+        	  arr.get(m).add(k);
+        	  idx = m;
+        	  added = true; 
+        	  }else{
+        	  arr.get(idx).addAll(arr.get(m));
+              arr.get(idx).addAll(arr.get(m)); 
+              arr.remove(m);
+           	  }
+        	
+        	 }
+          } 
+         
+        if(!added) {
+         Set set = new HashSet();
+         set.add(j);
+         set.add(k);
+         arr.add(set);
+         
+        }
+        }
+           // System.out.println(arr);
+        
+   }
+        long tot=0;
+        long sum=0;
+           
+        for(int p=0;p<arr.size();p++) {
+        tot =tot + sum*arr.get(p).size();
+        sum = sum+ arr.get(p).size();
+        
+        }
+        
+     while(n-sum>0){
+      tot =tot + sum;
+        sum = sum+ 1; 
+     }
+             
+      return tot;  
+    }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int p = in.nextInt();
+        long[][] astronaut = new long[p][2];
+        for(int astronaut_i = 0; astronaut_i < p; astronaut_i++){
+            for(int astronaut_j = 0; astronaut_j < 2; astronaut_j++){
+                astronaut[astronaut_i][astronaut_j] = in.nextInt();
+            }
+        }
+        long result = journeyToMoon(n, astronaut);
+        System.out.println(result);
+        in.close();
+    }
+}
